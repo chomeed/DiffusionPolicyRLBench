@@ -19,7 +19,7 @@ create dataset
 '''
 
 # 1. collect overhead images & 2. collect agent pos 
-episode_paths = glob('rlbench_data/reach_target/*/episodes/episode*')
+episode_paths = glob('../rlbench_data/reach_target/*/episodes/episode*')
 image_wrist_root = 'wrist_rgb'
 image_overhead_root = 'overhead_rgb'
 agent_pos_filename = 'low_dim_obs.pkl'
@@ -164,10 +164,10 @@ class TaskImageDataset(torch.utils.data.Dataset):
 
         # compute statistics and normalized data to [-1,1]
         stats = dict()
-        # normalized_train_data = dict()
-        # for key, data in train_data.items():
-        #     stats[key] = get_data_stats(data)
-        #     normalized_train_data[key] = normalize_data(data, stats[key])
+
+        key = 'action'
+        stats[key] = get_data_stats(train_data['action'][:, :3])
+        train_data['action'] = np.concatenate([normalize_data(train_data['action'][:, :3], stats[key]), train_data['action'][:, 3:]], axis=-1)
 
         # images are already normalized
         # normalized_train_data['image'] = train_image_data
